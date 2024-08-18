@@ -1,0 +1,52 @@
+name: Build Linux OS
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y debootstrap live-build qemu-system-x86
+
+    - name: Build Linux OS
+      run: |
+        # Create a directory for the build
+        mkdir -p live-build-config
+        cd live-build-config
+        
+        # Initialize live-build configuration
+        lb config
+        
+        # Add custom configurations or packages if needed
+        # Example: Add custom package list
+        echo "task-laptop" > config/package-lists/my.list.chroot
+        
+        # Build the OS
+        lb build
+
+    - name: Run tests in no-graphic mode
+      run: |
+        # Test the built OS image in no-graphic mode
+        qemu-system-x86_64 -cdrom live-build-config/live-image-amd64.hybrid.iso -boot d -m 512 -nographic -serial mon:stdio -net user,hostfwd=tcp::10022-:22 -net nic
+        # Add any additional test commands you want to run after the OS boots
+
+    - name: Upload artifact
+      if: success()
+      uses: actions/upload-artifact@v2
+      with:
+        name: live-image
+        path: live-build-config/live-image-amd64.hybrid.iso
+        
