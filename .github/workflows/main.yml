@@ -28,14 +28,16 @@ jobs:
         cd live-build-config
         
         # Initialize live-build configuration
-        sudo lb config
+        lb config
         
-        # Add custom configurations or packages if needed
-        # Example: Add custom package list
-        sudo echo "task-laptop" > config/package-lists/my.list.chroot
+        # Ensure the package list directory exists
+        mkdir -p config/package-lists
+        
+        # Add custom package list
+        echo "task-laptop" > config/package-lists/my.list.chroot
         
         # Build the OS
-        sudo lb build
+        lb build
 
     - name: Run tests in no-graphic mode
       run: |
