@@ -24,8 +24,8 @@ jobs:
     - name: Build Linux OS
       run: |
         # Create a directory for the build
-        sudo mkdir -p live-build-config
-        sudo cd live-build-config
+        mkdir -p live-build-config
+        cd live-build-config
         
         # Initialize live-build configuration
         sudo lb config
