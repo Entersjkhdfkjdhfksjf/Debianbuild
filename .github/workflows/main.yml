@@ -24,18 +24,18 @@ jobs:
     - name: Build Linux OS
       run: |
         # Create a directory for the build
-        mkdir -p live-build-config
-        cd live-build-config
+        sudo mkdir -p live-build-config
+        sudo cd live-build-config
         
         # Initialize live-build configuration
-        lb config
+        sudo lb config
         
         # Add custom configurations or packages if needed
         # Example: Add custom package list
-        echo "task-laptop" > config/package-lists/my.list.chroot
+        sudo echo "task-laptop" > config/package-lists/my.list.chroot
         
         # Build the OS
-        lb build
+        sudo lb build
 
     - name: Run tests in no-graphic mode
       run: |
